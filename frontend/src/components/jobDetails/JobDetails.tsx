@@ -55,7 +55,7 @@ function JobDetails() {
         onSubmit={handleSubmit}
         className="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg space-y-6"
       >
-        {/* Job Title Input */}
+      
         <div className="flex flex-col">
           <label
             className="text-lg font-medium text-gray-700 mb-2"
@@ -73,7 +73,6 @@ function JobDetails() {
           />
         </div>
 
-        {/* Company Name Input */}
         <div className="flex flex-col">
           <label
             className="text-lg font-medium text-gray-700 mb-2"
@@ -91,7 +90,6 @@ function JobDetails() {
           />
         </div>
 
-        {/* Job Description Input */}
         <div className="flex flex-col">
           <label
             className="text-lg font-medium text-gray-700 mb-2"
@@ -125,7 +123,6 @@ function JobDetails() {
           />
         </div>
 
-        {/* Submit Button */}
         <div className="flex justify-center">
           <button
             type="submit"

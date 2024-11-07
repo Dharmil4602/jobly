@@ -5,5 +5,8 @@
   "description": "Jobly is a job search engine that helps you find your dream job",
   "action": {
       "default_popup": "index.html"
+  },
+  "background": {
+      "service_worker": "background.js"
   }
 }
