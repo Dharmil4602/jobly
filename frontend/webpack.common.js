@@ -34,7 +34,7 @@ module.exports = {
       filename: "styles.css",
     }),
     ...getHtmlPlugins([
-      "index",
+      // "index",
       "background",
     ])
   ],
