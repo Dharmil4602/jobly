@@ -25,11 +25,9 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      "process.env.REACT_APP_BACKEND_URL": JSON.stringify("http://localhost:5000"),
+      // "process.env.REACT_APP_BACKEND_URL": JSON.stringify("http://localhost:5000"), // For Local Development
+      "process.env.REACT_APP_BACKEND_URL": JSON.stringify("https://job-scanner-extension.ue.r.appspot.com"), // For Production
     }),
-    // new webpack.DefinePlugin({
-    //   "process.env": { REACT_APP_BACKEND_URL: "http://localhost:5000" },
-    // }),
     new copyPlugin({
       patterns: [
         {
