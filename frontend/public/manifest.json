@@ -1,15 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Jobly, Get your dream job",
+  "name": "Jobly: Your Resume Analyser",
   "version": "1.0",
-  "description": "Jobly is a job search engine that helps you find your dream job",
+  "description": "Jobly helps you find your dream job and offers AI-powered resume feedback to make your application stand out.",
+  "icons": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+  },
   "action": {
       "default_popup": "index.html"
   },
   "permissions":[
-    "storage"
-  ],
-  "background": {
-      "service_worker": "background.js"
-  }
+    "storage",
+    "unlimitedStorage"
+  ]
 }

@@ -1,6 +1,6 @@
 import JobDetails from './components/jobDetails/JobDetails';
 
-function App() {
+function App() {  
   return (
     <div className='min-h-screen'>
       <JobDetails/>
