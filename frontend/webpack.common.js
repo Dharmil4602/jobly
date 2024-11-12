@@ -7,6 +7,8 @@ const webpack = require("webpack");
 module.exports = {
   entry: {
     index: path.resolve(__dirname, "src/index.tsx"),
+    background: path.resolve(__dirname, "src/background/Background.ts"),
+    content: path.resolve(__dirname, "src/content-script/ContentScript.ts")
   },
   module: {
     rules: [
@@ -25,8 +27,8 @@ module.exports = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      // "process.env.REACT_APP_BACKEND_URL": JSON.stringify("http://localhost:5000"), // For Local Development
-      "process.env.REACT_APP_BACKEND_URL": JSON.stringify("https://job-scanner-extension.ue.r.appspot.com"), // For Production
+      "process.env.REACT_APP_BACKEND_URL": JSON.stringify("http://localhost:5000"), // For Local Development
+      // "process.env.REACT_APP_BACKEND_URL": JSON.stringify("https://job-scanner-extension.ue.r.appspot.com"), // For Production
     }),
     new copyPlugin({
       patterns: [

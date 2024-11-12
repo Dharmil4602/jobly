@@ -3,6 +3,10 @@
   "name": "Jobly: Your Resume Analyser",
   "version": "1.0",
   "description": "Jobly helps you find your dream job and offers AI-powered resume feedback to make your application stand out.",
+  "web_accessible_resources": [{
+    "resources": ["pdf.worker.js"],
+    "matches": ["<all_urls>"]
+  }],
   "icons": {
       "16": "icon.png",
       "48": "icon.png",
@@ -13,6 +17,19 @@
   },
   "permissions":[
     "storage",
-    "unlimitedStorage"
+    "unlimitedStorage",
+    "tabs",
+    "scripting",
+    "activeTab"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "host_permissions": ["<all_urls>"],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"]
+    }
   ]
 }

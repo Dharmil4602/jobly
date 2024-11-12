@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Analysis from "../analysis/Analysis";
+import pdfToText from "react-pdftotext";
 import { Briefcase, Building2, FileText, FileTextIcon } from "lucide-react";
+import * as pdfjs from 'pdfjs-dist';
+
+pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.js');
 
 function JobDetails() {
   const [jobTitle, setJobTitle] = useState("");
@@ -10,6 +14,52 @@ function JobDetails() {
   const [resume, setResume] = useState("");
   const [loading, setLoading] = useState(false);
   const [analysisData, setAnalysisData] = useState(null);
+  const [pdfError, setPdfError] = useState("")
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (file.type === 'application/pdf') {
+      setLoading(true);
+      const text = await extractTextFromPdf(file);
+      setResume(text);
+      setLoading(false);
+    } else {
+      setPdfError("Please upload a PDF file");
+    }
+  };
+
+  const extractTextFromPdf = async (file: File): Promise<string> => {
+    try {
+      // Convert file to ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
+      
+      // Load the PDF document
+      const loadingTask = pdfjs.getDocument({data: arrayBuffer});
+      const pdf = await loadingTask.promise;
+
+      
+      let fullText = '';
+      
+      // Extract text from each page
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ');
+        fullText += pageText + '\n';
+      }
+      
+      setPdfError("");
+      return fullText.trim();
+    } catch (error) {
+      console.error('Error extracting text from PDF:', error);
+      setPdfError("Failed to extract text from PDF. Please try copying and pasting the content manually.");
+      return "";
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,6 +94,14 @@ function JobDetails() {
     }
   };
 
+  function extractText(event: any) {
+    const file = event.target.files[0];
+    pdfToText(file)
+      .then((text) => setResume(text))
+      .catch((error) => console.error("Failed to extract text from pdf"));
+  }
+
+  // Without using the useEffect hook, the data will be lost when the component is re-rendered, but when returned back from the analysis page, the state will be restored
   useEffect(() => {
     chrome.storage.sync.get(["formDetails", "analysisMode"], (result) => {
       if (result.formDetails && result.analysisMode) {
@@ -64,7 +122,9 @@ function JobDetails() {
   }, []);
 
   if (analysisData) {
-    return <Analysis data={analysisData} onGoBack={() => setAnalysisData(null)} />;
+    return (
+      <Analysis data={analysisData} onGoBack={() => setAnalysisData(null)} />
+    );
   }
 
   return (
@@ -152,6 +212,11 @@ function JobDetails() {
                 <FileTextIcon className="w-5 h-5 mr-2 text-blue-500" />
                 Resume
               </label>
+              <input
+                type="file"
+                accept="application/pdf"
+                onChange={handleFileChange}
+              />
               <textarea
                 id="resume"
                 value={resume}
@@ -171,9 +236,25 @@ function JobDetails() {
             >
               {loading ? (
                 <div className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  <svg
+                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
                   </svg>
                   Analyzing...
                 </div>
