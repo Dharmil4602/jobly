@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Analysis from "../analysis/Analysis";
-import pdfToText from "react-pdftotext";
 import { Briefcase, Building2, FileText, FileTextIcon } from "lucide-react";
 import * as pdfjs from 'pdfjs-dist';
 import { JobContext } from "../../context/JobContext";
@@ -96,13 +95,6 @@ function JobDetails() {
       setLoading(false);
     }
   };
-
-  function extractText(event: any) {
-    const file = event.target.files[0];
-    pdfToText(file)
-      .then((text) => setResume(text))
-      .catch((error) => console.error("Failed to extract text from pdf"));
-  }
 
   // Without using the useEffect hook, the data will be lost when the component is re-rendered, but when returned back from the analysis page, the state will be restored
   useEffect(() => {
