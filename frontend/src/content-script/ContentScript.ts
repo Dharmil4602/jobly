@@ -29,12 +29,6 @@ const jobDetailsExtraction = async ($: cheerio.CheerioAPI): Promise<any> => {
       .get()
       .join(" ") || "N/A";
 
-  // Logging the results for debugging purposes
-  //   console.log("Job Title:", jobTitle);
-  //   console.log("Company Name:", companyName);
-    console.log("Job Description:", [{jobDescription}]);
-
-    // Returning all extracted details as an object
     return {
       jobTitle,
     //   companyName,

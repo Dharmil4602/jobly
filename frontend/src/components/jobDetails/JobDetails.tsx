@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import Analysis from "../analysis/Analysis";
 import pdfToText from "react-pdftotext";
 import { Briefcase, Building2, FileText, FileTextIcon } from "lucide-react";
 import * as pdfjs from 'pdfjs-dist';
+import { JobContext } from "../../context/JobContext";
 
 pdfjs.GlobalWorkerOptions.workerSrc = chrome.runtime.getURL('pdf.worker.js');
 
 function JobDetails() {
+  const {jobData} = useContext(JobContext)
+
   const [jobTitle, setJobTitle] = useState("");
   const [companyName, setCompanyName] = useState("");
   const [jobDescription, setJobDescription] = useState("");
@@ -111,7 +114,14 @@ function JobDetails() {
         setResume(result.formDetails.resume);
       }
     });
-  }, []);
+
+    if (jobData) {
+      setJobTitle(jobData.jobTitle || "");
+      setCompanyName(jobData.companyName || "");
+      setJobDescription(jobData.jobDescription || "");
+    }
+  
+  }, [jobData]);
 
   useEffect(() => {
     return () => {
